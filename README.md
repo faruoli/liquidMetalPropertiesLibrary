@@ -74,27 +74,43 @@ Calculates the thermal conductivity of the liquid metal at a given temperature a
  
  ## Example of usage - Matlab
  
-% Load the library
+    % Load the library
+    loadlibrary('liquidMetalProperties.dll', 'liquidMetalProperties.h');
+    % Call the functions
+    temperature = 500;
+    material = 'Pb';
+    density = calllib('liquidMetalProperties', 'GetDensity', temperature, material);
+    specificHeat = calllib('liquidMetalProperties', 'GetSpecificHeat', temperature, material);
+    disp(['Density: ', num2str(density), ' kg/m^3']);
+    disp(['Specific Heat: ', num2str(specificHeat), ' J/kg·K']);
+    % Unload the library
+    unloadlibrary('liquidMetalProperties');
 
-loadlibrary('liquidMetalProperties.dll', 'liquidMetalProperties.h');
+    
+ ## Example of usage - Pyhton
 
-% Call the functions
-
-temperature = 500;
-
-material = 'Pb';
-
-density = calllib('liquidMetalProperties', 'GetDensity', temperature, material);
-
-specificHeat = calllib('liquidMetalProperties', 'GetSpecificHeat', temperature, material);
-
-disp(['Density: ', num2str(density), ' kg/m^3']);
-
-disp(['Specific Heat: ', num2str(specificHeat), ' J/kg·K']);
-
-% Unload the library
-
-unloadlibrary('liquidMetalProperties');
+    import ctypes
+    from ctypes import c_double, c_char_p
+     
+    dll  = ctypes.CDLL(r"liquidMetalProperties.dll")
+     
+    # Define the return types and argument types for the functions in the DLL
+    dll.GetDensity.restype = c_double
+    dll.GetDensity.argtypes = [c_double]
+    dll.GetSpecificHeat.restype = c_double
+    dll.GetSpecificHeat.argtypes = [c_double, c_char_p]  # temperature (double) and material (const char*)
+    
+    # Example usage of the functions
+ 
+    material = b"Pb"  # b"Pb" because ctypes expects a byte string (C-style string)
+    # Call GetDensity
+    temperature = 1000.0
+    density = dll.GetDensity(c_double(temperature),c_char_p(material))
+    print(f"Density at {temperature}K: {density} kg/m^3")
+    # Call GetSpecificHeat
+ 
+    specific_heat = dll.GetSpecificHeat(c_double(temperature), c_char_p(material))
+    print(f"Specific Heat for {material.decode()} at {temperature}K: {specific_heat} J/kg·K")
 
 
 ## Compilation Instructions
