@@ -134,7 +134,7 @@ To compile the DLL from source, follow these steps:
 ## Contact Information
 For bug reports or additional support, please contact:
 - Email: maria.faruoli@vki.ac.be
-- GitHub: https://github.com/liquidmetals/issues  ****to fix*****
+- GitHub: https://github.com/faruoli/liquidMetalPropertiesLibrary/issues
 
 
 
