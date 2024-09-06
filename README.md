@@ -75,20 +75,26 @@ Calculates the thermal conductivity of the liquid metal at a given temperature a
  ## Example of usage - Matlab
  
 % Load the library
+
 loadlibrary('liquidMetalProperties.dll', 'liquidMetalProperties.h');
 
 % Call the functions
+
 temperature = 500;
+
 material = 'Pb';
 
-density = calllib('yourLibrary', 'GetDensity', temperature, material);
-specificHeat = calllib('yourLibrary', 'GetSpecificHeat', temperature, material);
+density = calllib('liquidMetalProperties', 'GetDensity', temperature, material);
+
+specificHeat = calllib('liquidMetalProperties', 'GetSpecificHeat', temperature, material);
 
 disp(['Density: ', num2str(density), ' kg/m^3']);
+
 disp(['Specific Heat: ', num2str(specificHeat), ' J/kg·K']);
 
 % Unload the library
-unloadlibrary('yourLibrary');
+
+unloadlibrary('liquidMetalProperties');
 
 
 ## Compilation Instructions
