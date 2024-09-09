@@ -95,10 +95,9 @@ Calculates the thermal conductivity of the liquid metal at a given temperature a
     dll  = ctypes.CDLL(r"liquidMetalProperties.dll")
      
     # Define the return types and argument types for the functions in the DLL
+    # Define the return types and argument types for the functions in the DLL
     dll.GetDensity.restype = c_double
-    dll.GetDensity.argtypes = [c_double]
     dll.GetSpecificHeat.restype = c_double
-    dll.GetSpecificHeat.argtypes = [c_double, c_char_p]  # temperature (double) and material (const char*)
     
     # Example usage of the functions
  
