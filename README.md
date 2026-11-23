@@ -2,17 +2,23 @@
 
 The Liquid Metal Properties DLL provides a set of functions for calculating the physical properties of various liquid metals based on temperature. 
 It computes: 
-- Density,
-- Viscosity,
-- Thermal Conductivity,
-- Specific Heat capacity
+- Density
+- Dynamic Viscosity
+- Kinematic Viscosity
+- Surface Tension
+- Thermal Conductivity
+- Specific Heat Capacity
+- Saturation Pressure
+- Normal Melting Point
+- Normal Boiling Point
+- Volumetric Thermal Expansion Coefficient
 
 The available materials are:
 - Lead - 'Pb'
 - Bismuth - 'Bi'
 - LBE - 'LBE'
 
-This library can be integrated into C/C++ programs, as well as MATLAB, for scientific computations and simulations.
+This library can be integrated into C/C++ programs, as well as MATLAB and Python, for scientific computations and simulations.
 
 Reference: 
 "Handbook on Lead-bismuth Eutectic Alloy and Lead Properties, Materials Compatibility, Thermal-hydraulics and Technologies – 2015 Edition"
@@ -60,7 +66,27 @@ Calculates the dynamic viscosity of the liquid metal at a given temperature and 
   - `material` (const char*): The material name (e.g., "Pb" for lead, "Bi" for bismuth, "LBE" for LBE).
   
 - **Returns**:
-  - (double): The specific heat capacity in Pa·s.
+  - (double): The dynamic viscosity in Pa·s.
+
+### `double GetKinematicViscosity(double temperature, const char* material)`
+Calculates the kinematic viscosity ($\nu = \mu / \rho$) of the liquid metal at a given temperature and for a specific material.
+
+- **Parameters**:
+  - `temperature` (double): The temperature in Kelvin.
+  - `material` (const char*): The material name ("Pb", "Bi", or "LBE").
+
+- **Returns**:
+  - (double): The kinematic viscosity in m^2/s.
+
+### `double GetSurfaceTension(double temperature, const char* material)`
+Calculates the surface tension of the liquid metal at a given temperature and for a specific material.
+
+- **Parameters**:
+  - `temperature` (double): The temperature in Kelvin.
+  - `material` (const char*): The material name ("Pb", "Bi", or "LBE").
+
+- **Returns**:
+  - (double): The surface tension in N/m.
 
 ### `double GetThermalConductivity(double temperature, const char* material)`
 Calculates the thermal conductivity of the liquid metal at a given temperature and for a specific material.
@@ -70,46 +96,63 @@ Calculates the thermal conductivity of the liquid metal at a given temperature a
   - `material` (const char*): The material name (e.g., "Pb" for lead, "Bi" for bismuth, "LBE" for LBE).
   
 - **Returns**:
-  - (double): The themal conductivity in W/m·K.
+  - (double): The thermal conductivity in W/m·K.
+
+### `double GetSaturationPressure(double temperature, const char* material)`
+Calculates the saturation pressure of the liquid metal at a given temperature and for a specific material.
+
+- **Parameters**:
+  - `temperature` (double): The temperature in Kelvin.
+  - `material` (const char*): The material name ("Pb", "Bi", or "LBE").
+
+- **Returns**:
+  - (double): The saturation pressure in Pa.
+
+### `double GetMeltingPoint(const char* material)`
+Returns the normal melting point of the liquid metal at atmospheric pressure.
+
+- **Parameters**:
+  - `material` (const char*): The material name ("Pb", "Bi", or "LBE").
+
+- **Returns**:
+  - (double): The normal melting point in K.
+
+### `double GetBoilingPoint(const char* material)`
+Returns the normal boiling point of the liquid metal at atmospheric pressure.
+
+- **Parameters**:
+  - `material` (const char*): The material name ("Pb", "Bi", or "LBE").
+
+- **Returns**:
+  - (double): The normal boiling point in K.
+
+### `double GetThermalExpansion(double temperature, const char* material)`
+Calculates the coefficient of volumetric thermal expansion (CVTE) of the liquid metal at a given temperature and for a specific material.
+
+- **Parameters**:
+  - `temperature` (double): The temperature in Kelvin.
+  - `material` (const char*): The material name ("Pb", "Bi", or "LBE").
+
+- **Returns**:
+  - (double): The volumetric thermal expansion coefficient in 1/K.
  
  ## Example of usage - Matlab
  
-    % Load the library
-    loadlibrary('liquidMetalProperties.dll', 'liquidMetalProperties.h');
-    % Call the functions
-    temperature = 500;
-    material = 'Pb';
-    density = calllib('liquidMetalProperties', 'GetDensity', temperature, material);
-    specificHeat = calllib('liquidMetalProperties', 'GetSpecificHeat', temperature, material);
-    disp(['Density: ', num2str(density), ' kg/m^3']);
-    disp(['Specific Heat: ', num2str(specificHeat), ' J/kg·K']);
-    % Unload the library
-    unloadlibrary('liquidMetalProperties');
+% Load the library
+loadlibrary('liquidMetalProperties.dll', 'liquidMetalProperties.h');
 
-    
- ## Example of usage - Pyhton
+% Call the functions
+temperature = 500;
+material = 'Pb';
 
-    import ctypes
-    from ctypes import c_double, c_char_p
-     
-    dll  = ctypes.CDLL(r"liquidMetalProperties.dll")
-     
-    # Define the return types and argument types for the functions in the DLL
-    # Define the return types and argument types for the functions in the DLL
-    dll.GetDensity.restype = c_double
-    dll.GetSpecificHeat.restype = c_double
-    
-    # Example usage of the functions
- 
-    material = b"Pb"  # b"Pb" because ctypes expects a byte string (C-style string)
-    # Call GetDensity
-    temperature = 1000.0
-    density = dll.GetDensity(c_double(temperature),c_char_p(material))
-    print(f"Density at {temperature}K: {density} kg/m^3")
-    # Call GetSpecificHeat
- 
-    specific_heat = dll.GetSpecificHeat(c_double(temperature), c_char_p(material))
-    print(f"Specific Heat for {material.decode()} at {temperature}K: {specific_heat} J/kg·K")
+density = calllib('yourLibrary', 'GetDensity', temperature, material);
+specificHeat = calllib('yourLibrary', 'GetSpecificHeat', temperature, material);
+
+disp(['Density: ', num2str(density), ' kg/m^3']);
+disp(['Specific Heat: ', num2str(specificHeat), ' J/kg·K']);
+
+% Unload the library
+unloadlibrary('yourLibrary');
 
 
 ## Compilation Instructions
@@ -133,7 +176,7 @@ To compile the DLL from source, follow these steps:
 ## Contact Information
 For bug reports or additional support, please contact:
 - Email: maria.faruoli@vki.ac.be
-- GitHub: https://github.com/faruoli/liquidMetalPropertiesLibrary/issues
+- GitHub: https://github.com/liquidmetals/issues  ****to fix*****
 
 
 
